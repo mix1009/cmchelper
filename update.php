@@ -9,16 +9,18 @@
   }
 
   function update() {
-    $json = "https://api.coinmarketcap.com/v2/listings/";
-    $jsonfile = file_get_contents($json);
+    global $cmc_pro_api_key;
+
+    $url = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/map?CMC_PRO_API_KEY=$cmc_pro_api_key";
+    $jsonfile = file_get_contents($url);
     $jso = json_decode($jsonfile, true);
 
     foreach ($jso["data"] as $item) { 
       $id = $item["id"];
       $name = $item["name"];
       $symbol = $item["symbol"];
-      $website_slug = $item["website_slug"];
-      echo("$id $name ($symbol) $website_slug <BR>\n");
+      $website_slug = $item["slug"];
+      //echo("$id $name ($symbol) $website_slug <BR>\n");
       registerCmcId($id, $name, $symbol, $website_slug);
     }
   }
@@ -28,9 +30,16 @@
     return;
   }
 
+  if (strlen($cmc_pro_api_key)==0) {
+    echo("Coinmarketcap API key not configured in config.php ! <br/>\n");
+    return;
+  }
+
   if (strlen($_SERVER["REMOTE_ADDR"]) == 0) {
     // update only when executed from command line.
     update();
+  } else {
+    echo("execute update.php from command line preferably from crontab ! <br/>\n");
   }
 
 ?>

@@ -13,4 +13,6 @@
   $memcached = new Memcached();
   $memcached->addServer("127.0.0.1", MEMCACHED_PORT);
 
+  // CoinMarketCap Pro API Key: GET API KEY FROM https://pro.coinmarketcap.com/signup
+  $cmc_pro_api_key = "";
 ?>
